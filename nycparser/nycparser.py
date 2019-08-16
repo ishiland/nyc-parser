@@ -1,6 +1,5 @@
 import re
 
-
 class Parser:
     def __init__(self):
 
@@ -22,7 +21,7 @@ class Parser:
 
     def address(self, address):
         """
-        Parses a single line input address for more accurate geocoding using Geosupport.
+        Parses a single line input address.
         :param address: a single line input address with PHN and Street, ex. "100 Gold St."
         :return: A dictionary with PHN, STREET, BOROUGH_CODE, BOROUGH_NAME, ZIP
         """
@@ -63,5 +62,31 @@ class Parser:
         if len(borough):
             result['BOROUGH_CODE'] = borough[0]
             result['BOROUGH_NAME'] = self.borough_dict_reverse[result['BOROUGH_CODE']]
+
+        return result
+
+    def bbl(self, bbl):
+        """
+        Parses a single line input BBL.
+        :param bbl: a single line input bbl, ex. "100 Gold St."
+        :return: A dictionary with PHN, STREET, BOROUGH_CODE, BOROUGH_NAME, ZIP
+        """
+        result = dict()
+
+        result['BOROUGH_CODE'] = None
+        result['BLOCK'] = None
+        result['LOT'] = None
+        result['BOROUGH_NAME'] = None
+
+        # remove any special characters
+        tmp = ''.join(e for e in str(bbl) if e.isalnum())
+
+        if len(tmp) == 10:
+            result['BOROUGH_CODE'] = int(tmp[0])
+            result['BLOCK'] = int(tmp[2:6])
+            result['LOT'] = int(tmp[-4:])
+            result['BOROUGH_NAME'] = self.borough_dict_reverse[result['BOROUGH_CODE']]
+        else:
+            raise Exception('{} is not a 10 digit BBL.'.format(bbl))
 
         return result
