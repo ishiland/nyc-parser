@@ -12,9 +12,9 @@ with open("README.md", "r") as fh:
 
 setup(
     name='nyc-parser',
-    version='0.0.2',
+    version='0.0.3',
     url='https://github.com/ishiland/nyc-parser',
-    description='Parse single line NYC addresses.',
+    description='Parse single line NYC addresses and BBLs.',
     long_description=long_description,
     long_description_content_type='text/markdown',
     author='Ian Shiland',
@@ -22,7 +22,7 @@ setup(
     packages=['nycparser'],
     include_package_data=True,
     license='MIT',
-    keywords=['NYC', 'geocoder', 'address', 'parser'],
+    keywords=['NYC', 'address', 'BBL', 'parser'],
     classifiers=[
         'Operating System :: Microsoft :: Windows',
         'Operating System :: POSIX :: Linux',
