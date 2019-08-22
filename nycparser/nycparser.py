@@ -68,8 +68,8 @@ class Parser:
     def bbl(self, bbl):
         """
         Parses a single line input BBL.
-        :param bbl: a single line input bbl, ex. "100 Gold St."
-        :return: A dictionary with PHN, STREET, BOROUGH_CODE, BOROUGH_NAME, ZIP
+        :param bbl: a single line input bbl. Can contain special characters, just needs 10 digits. 
+        :return: A dictionary with BOROUGH_CODE, BLOCK, LOT and BOROUGH_NAME
         """
         result = dict()
 
