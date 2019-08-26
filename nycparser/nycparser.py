@@ -1,5 +1,6 @@
 import re
 
+
 class Parser:
     def __init__(self):
 
@@ -19,6 +20,10 @@ class Parser:
             5: 'STATEN ISLAND',
         }
 
+        self.phn_words = r'FRONT|REAR|GARAGE|AIR RGTS|1/2'
+
+        self.STREET_NAMES = r'STREET'
+
     def address(self, address):
         """
         Parses a single line input address.
@@ -33,17 +38,36 @@ class Parser:
 
         result = {
             'PHN': phn,
-            'STREET': unparsed,
+            'STREET': unparsed.upper(),
             'BOROUGH_CODE': None,
             'BOROUGH_NAME': None,
             'ZIP': None
         }
 
+        # find special cases with words in PHN
+        phn_word_match = re.findall(self.phn_words, result['STREET'], re.IGNORECASE)
+        if phn_word_match:
+            phn_word_match_length = len(phn_word_match[0])
+            if phn_word_match[0] == result['STREET'][:phn_word_match_length]:
+                street_name_match = re.findall(self.STREET_NAMES, result['STREET'], re.IGNORECASE)
+
+                if street_name_match:
+                    street_name_match_length = len(street_name_match[0])
+                    if street_name_match[0] != result['STREET'][:-street_name_match_length]:
+
+                        result['PHN'] = "{} {}".format(result["PHN"], phn_word_match[0])
+                        result["STREET"] = result['STREET'][phn_word_match_length:]
+
+                else:
+                    result['PHN'] = "{} {}".format(result["PHN"], phn_word_match[0])
+                    result["STREET"] = result['STREET'][phn_word_match_length:]
+
+
         # Get the Street
         separators = [',', 'APT', 'SUITE', '#', 'UNIT', '-']
         for s in separators:
             # remove any white space and consecutive separators around separator
-            rem = re.sub(r'[^\w]+{}[^\w]+'.format(s), s, unparsed)
+            rem = re.sub(r'[^\w]+{}[^\w]+'.format(s), s, result["STREET"])
             # find all instances of it
             fa = re.findall(r'{}.+'.format(s), rem)
             # get everything past the first string
@@ -58,10 +82,16 @@ class Parser:
 
         # Get the Borough
         borough = [self.borough_dict[b] for b in self.borough_dict if
-                   len(re.findall(r'{}'.format(b), unparsed.upper()))]
+                   len(re.findall(r'{}'.format(b), result['STREET']))]
+
         if len(borough):
-            result['BOROUGH_CODE'] = borough[0]
-            result['BOROUGH_NAME'] = self.borough_dict_reverse[result['BOROUGH_CODE']]
+            if borough[0]:
+                boro_name = self.borough_dict_reverse[borough[0]]
+                if result["STREET"][-len(boro_name):] == boro_name:
+                    result['BOROUGH_CODE'] = borough[0]
+                    result['BOROUGH_NAME'] = boro_name
+                    result["STREET"] = result["STREET"][:-len(boro_name)].strip()
+                    result["STREET"] = result["STREET"].replace("  ", " ")
 
         return result
 

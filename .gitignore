@@ -12,3 +12,5 @@ MANIFEST
 cover
 .coverage
 coverage.xml
+*.zip
+*.txt
