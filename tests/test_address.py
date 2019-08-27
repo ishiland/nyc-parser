@@ -3,10 +3,10 @@ from tests.testcase import TestCase
 class TestAddress(TestCase):
 
     def test_phn(self):
-        result = self.parser.address('100')
+        result = self.parser.address('100 Gold')
         self.assertDictEqual({
             'PHN': '100',
-            'STREET': '',
+            'STREET': 'GOLD',
             'BOROUGH_CODE': None,
             'BOROUGH_NAME': None,
             'ZIP': None

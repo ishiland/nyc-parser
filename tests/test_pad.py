@@ -34,3 +34,29 @@ class TestPAD(TestCase):
                         'BOROUGH_NAME': boro_name,
                         'ZIP': zip
                     }, result)
+
+
+    def test_double_word_phn(self):
+        test_string = "319 REAR A CANAL STREET, MN 14010"
+        result = self.parser.address(test_string)
+
+        self.assertDictEqual({
+            'PHN': '319 REAR A',
+            'STREET': 'CANAL STREET',
+            'BOROUGH_CODE': 1,
+            'BOROUGH_NAME': 'MANHATTAN',
+            'ZIP': '14010'
+        }, result)
+
+
+    def test_double_word_phn2(self):
+        test_string = "102 1/2 BOWERY, MN 10013"
+        result = self.parser.address(test_string)
+        print(result)
+        self.assertDictEqual({
+            'PHN': '102 1/2',
+            'STREET': 'BOWERY',
+            'BOROUGH_CODE': 1,
+            'BOROUGH_NAME': 'MANHATTAN',
+            'ZIP': '10013'
+        }, result)

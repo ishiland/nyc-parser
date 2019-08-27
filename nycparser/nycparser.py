@@ -20,7 +20,7 @@ class Parser:
             5: 'STATEN ISLAND',
         }
 
-        self.phn_words = r'FRONT|REAR|GARAGE|AIR RGTS|1/2'
+        self.phn_words = r'FRONT|REAR A |REAR B |REAR|GARAGE|AIR RGTS|1/2'
 
         self.STREET_NAMES = r'STREET'
 
@@ -30,68 +30,79 @@ class Parser:
         :param address: a single line input address with PHN and Street, ex. "100 Gold St."
         :return: A dictionary with PHN, STREET, BOROUGH_CODE, BOROUGH_NAME, ZIP
         """
-        # Split the string on whitespace and take the first item as PHN
-        spl = address.split(" ")
-        phn = spl[0]
-
-        unparsed = " ".join(spl[1:]).strip().upper()
 
         result = {
-            'PHN': phn,
-            'STREET': unparsed.upper(),
+            'PHN': None,
+            'STREET': None,
             'BOROUGH_CODE': None,
             'BOROUGH_NAME': None,
             'ZIP': None
         }
 
+        # Split the string on whitespace and take the first item as PHN
+        spl = address.split(" ")
+        unparsed = " ".join(spl[1:]).strip().upper()
+
+        # # if only phn and street name in
+        # if 1 < len(spl) <= 3:
+        #     result['PHN'] = spl[0]
+        #     result['STREET'] = unparsed
+        #     return result
+
+        # Get the Zip Code
+        zip_code = re.findall(r'\b\d{5}', unparsed)
+        if len(zip_code):
+            unparsed = unparsed.replace(zip_code[0], "")
+            result['ZIP'] = zip_code[0]
+
+        # Get the Borough
+        borough = [self.borough_dict[b] for b in self.borough_dict if
+                   len(re.findall(r'{}'.format(b), unparsed))]
+
+        # remove anything past the last comma, we already go that info
+        if "," in unparsed:
+            unparsed = unparsed.split(",")[:-1][0]
+
+        if len(borough):
+            if borough[0]:
+                boro_name = self.borough_dict_reverse[borough[0]]
+                result['BOROUGH_CODE'] = borough[0]
+                result['BOROUGH_NAME'] = boro_name
+                if unparsed[-len(boro_name):] == boro_name:
+                    unparsed = unparsed[:-len(boro_name)].strip()
+                    unparsed = unparsed.replace("  ", " ")
+
         # find special cases with words in PHN
-        phn_word_match = re.findall(self.phn_words, result['STREET'], re.IGNORECASE)
+        phn_word_match = re.findall(self.phn_words, unparsed, re.IGNORECASE)
         if phn_word_match:
-            phn_word_match_length = len(phn_word_match[0])
-            if phn_word_match[0] == result['STREET'][:phn_word_match_length]:
-                street_name_match = re.findall(self.STREET_NAMES, result['STREET'], re.IGNORECASE)
-
-                if street_name_match:
-                    street_name_match_length = len(street_name_match[0])
-                    if street_name_match[0] != result['STREET'][:-street_name_match_length]:
-
-                        result['PHN'] = "{} {}".format(result["PHN"], phn_word_match[0])
-                        result["STREET"] = result['STREET'][phn_word_match_length:]
+            phn_word = max(phn_word_match, key=len)
+            phn_word_match_length = len(phn_word)
+            if phn_word == unparsed[:phn_word_match_length]:
+                # street_name_match = re.findall(self.STREET_NAMES, unparsed, re.IGNORECASE)
+                replaced = unparsed.replace(phn_word, "").strip()
+                if len(replaced.split(" ")) == 1:
+                    result['PHN'] = spl[0]
+                    # unparsed = replaced
 
                 else:
-                    result['PHN'] = "{} {}".format(result["PHN"], phn_word_match[0])
-                    result["STREET"] = result['STREET'][phn_word_match_length:]
-
+                    result['PHN'] = "{} {}".format(spl[0], phn_word).strip()
+                    unparsed = unparsed[phn_word_match_length:]
+        else:
+            result['PHN'] = spl[0].strip()
 
         # Get the Street
         separators = [',', 'APT', 'SUITE', '#', 'UNIT', '-']
         for s in separators:
             # remove any white space and consecutive separators around separator
-            rem = re.sub(r'[^\w]+{}[^\w]+'.format(s), s, result["STREET"])
+            rem = re.sub(r'[^\w]+{}[^\w]+'.format(s), s, unparsed)
             # find all instances of it
             fa = re.findall(r'{}.+'.format(s), rem)
             # get everything past the first string
             if len(fa):
                 # replace the matching string in the original input.
-                result['STREET'] = re.sub(fa[0], "", rem)
+                unparsed = re.sub(fa[0], "", rem)
 
-        # Get the Zip Code
-        zip_code = re.findall(r'\b\d{5}', address)
-        if len(zip_code):
-            result['ZIP'] = zip_code[0]
-
-        # Get the Borough
-        borough = [self.borough_dict[b] for b in self.borough_dict if
-                   len(re.findall(r'{}'.format(b), result['STREET']))]
-
-        if len(borough):
-            if borough[0]:
-                boro_name = self.borough_dict_reverse[borough[0]]
-                if result["STREET"][-len(boro_name):] == boro_name:
-                    result['BOROUGH_CODE'] = borough[0]
-                    result['BOROUGH_NAME'] = boro_name
-                    result["STREET"] = result["STREET"][:-len(boro_name)].strip()
-                    result["STREET"] = result["STREET"].replace("  ", " ")
+        result["STREET"] = unparsed.strip()
 
         return result
 
