@@ -36,6 +36,18 @@ $ pip install .
 'BOROUGH_CODE': 1,
 'BOROUGH_NAME': 'MANHATTAN'}
 
+
+# There is also a dictionary to get Borough code from Borough Name.
+>> p.borough_dict['BROOKLYN']
+
+3
+
+
+# Or you can do the reverse.
+>> p.borough_dict_reverse[3]
+
+'BROOKLYN'
+
 ```
 
 ### Contribute
