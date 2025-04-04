@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 setup(
     name="nyc-parser",
-    version="0.1.0",
+    version="0.1.1",
     packages=find_packages(),
     description="A parser for New York City addresses and BBL values",
     long_description=open("README.md").read(),
