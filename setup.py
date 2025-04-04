@@ -1,36 +1,25 @@
-try:
-    from setuptools import setup
-except ImportError:
-    raise ImportError(
-        "setuptools module required, please go to "
-        "https://pypi.python.org/pypi/setuptools and follow the instructions "
-        "for installing setuptools"
-    )
-
-with open("README.md", "r") as fh:
-    long_description = fh.read()
+from setuptools import setup, find_packages
 
 setup(
-    name='nyc-parser',
-    version='0.0.3',
-    url='https://github.com/ishiland/nyc-parser',
-    description='Parse single line NYC addresses and BBLs.',
-    long_description=long_description,
-    long_description_content_type='text/markdown',
-    author='Ian Shiland',
-    author_email='ishiland@gmail.com',
-    packages=['nycparser'],
-    include_package_data=True,
-    license='MIT',
-    keywords=['NYC', 'address', 'BBL', 'parser'],
+    name="nycparser",
+    version="0.1.0",
+    packages=find_packages(),
+    description="A parser for New York City addresses and BBL values",
+    long_description=open("README.md").read(),
+    long_description_content_type="text/markdown",
+    author="Ian Shiland",
+    author_email="ishiland@gmail.com",
+    url="https://github.com/ishiland/nyc-parser",
     classifiers=[
-        'Operating System :: Microsoft :: Windows',
-        'Operating System :: POSIX :: Linux',
-        'Programming Language :: Python :: 2.7',
-        'Programming Language :: Python :: 3.4',
-        'Programming Language :: Python :: 3.5',
-        'Programming Language :: Python :: 3.6',
-        'Programming Language :: Python :: 3.7',
+        "Programming Language :: Python :: 3",
+        "Programming Language :: Python :: 3.8",
+        "Programming Language :: Python :: 3.9",
+        "Programming Language :: Python :: 3.10",
+        "Programming Language :: Python :: 3.11",
+        "Programming Language :: Python :: 3.12",
+        "Programming Language :: Python :: 3.13",
+        "License :: OSI Approved :: MIT License",
+        "Operating System :: OS Independent",
     ],
-    test_suite="tests"
+    python_requires=">=3.8",
 )
