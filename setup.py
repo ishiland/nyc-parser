@@ -8,7 +8,7 @@ setup(
     long_description=open("README.md").read(),
     long_description_content_type="text/markdown",
     author="Ian Shiland",
-    author_email="your.email@example.com",
+    author_email="ishiland@gmail.com",
     url="https://github.com/ishiland/nyc-parser",
     classifiers=[
         "Programming Language :: Python :: 3",
