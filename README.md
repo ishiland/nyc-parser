@@ -2,7 +2,7 @@
 
 A Python utility for parsing New York City addresses and BBL (Borough-Block-Lot) values from a single line input.
 
-[![Python 3.6+](https://img.shields.io/badge/python-3.6+-blue.svg)](https://www.python.org/downloads/) [![Documentation Status](https://readthedocs.org/projects/nycparser/badge/?version=latest)](https://nycparser.readthedocs.io/en/latest/?badge=latest) [![GitHub Actions](https://github.com/ishiland/nyc-parser/actions/workflows/python-tests.yml/badge.svg)](https://github.com/ishiland/nyc-parser/actions/workflows/python-tests.yml) [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Python 3.6+](https://img.shields.io/badge/python-3.6+-blue.svg)](https://www.python.org/downloads/) [![Documentation Status](https://readthedocs.org/projects/nyc-parser/badge/?version=latest)](https://nyc-parser.readthedocs.io/en/latest/?badge=latest) [![GitHub Actions](https://github.com/ishiland/nyc-parser/actions/workflows/python-tests.yml/badge.svg)](https://github.com/ishiland/nyc-parser/actions/workflows/python-tests.yml) [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 ## Features
 
@@ -16,7 +16,7 @@ A Python utility for parsing New York City addresses and BBL (Borough-Block-Lot)
 ## Installation
 
 ```sh
-pip install nycparser
+pip install nyc-parser
 ```
 
 ## Usage
@@ -91,7 +91,7 @@ print(borough_name)  # 'BROOKLYN'
 
 ## Documentation
 
-Full documentation is available at [nycparser.readthedocs.io](https://nycparser.readthedocs.io/)
+Full documentation is available at [nyc-parser.readthedocs.io](https://nyc-parser.readthedocs.io/)
 
 ## Contributing
 
