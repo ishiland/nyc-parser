@@ -12,3 +12,29 @@ MANIFEST
 cover
 .coverage
 coverage.xml
+
+# Sphinx documentation
+/docs/build/
+/docs/_build/
+/docs/source/_build/
+/docs/source/__pycache__/
+docs/**/_autosummary/
+/docs/**/.doctrees/
+/docs/**/.buildinfo
+/docs/_static/
+/docs/_templates/
+
+# Virtual Environment
+.env
+.venv
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+
+# IDE related files
+.pytest_cache/
+.ruff_cache/
+.ipynb_checkpoints
+/scratch/
